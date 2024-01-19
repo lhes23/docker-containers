@@ -12,6 +12,8 @@ services:
       MYSQL_DATABASE: wp_${DOMAIN_NAME}
       MYSQL_USER: wp_${DOMAIN_NAME}
       MYSQL_PASSWORD: wp_${DOMAIN_NAME}
+    networks:
+      - network
 
   phpmyadmin:
     image: phpmyadmin
@@ -25,6 +27,8 @@ services:
       PMA_HOST: ${DOMAIN_NAME}_db
       MYSQL_ROOT_PASSWORD: wp_${DOMAIN_NAME}
       UPLOAD_LIMIT: 300M
+    networks:
+      - network
 
   wordpress:
     image: wordpress:latest
@@ -42,6 +46,13 @@ services:
       WORDPRESS_DB_NAME: wp_${DOMAIN_NAME}
       WORDPRESS_DB_USER: wp_${DOMAIN_NAME}
       WORDPRESS_DB_PASSWORD: wp_${DOMAIN_NAME}
+    networks:
+      - network
 
 volumes:
   dbdata:
+
+networks:
+  network:
+    name: ${DOMAIN_NAME}_network
+    driver: bridge
