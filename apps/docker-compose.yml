@@ -24,6 +24,7 @@ services:
     environment:
       PMA_HOST: ${DOMAIN_NAME}_db
       MYSQL_ROOT_PASSWORD: ${DOMAIN_NAME}
+      UPLOAD_LIMIT: 300M
 
   wordpress:
     image: wordpress:latest
