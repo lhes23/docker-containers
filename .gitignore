@@ -1,4 +1,5 @@
 /apps/*
-!/apps/.env-sample
-!/apps/docker-compose-sample.yml
+!/apps/.env
+!/apps/docker-compose.yml
 /nginx-proxy-manager/data/*
+/nginx-proxy-manager/db_data/*

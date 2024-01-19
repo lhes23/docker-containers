@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: ${DOMAIN_NAME}
+    volumes:
+      - ./${DOMAIN_NAME}:/var/www/html
+    ports:
+      - "8000:80"
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: docker_container_database:3306
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}

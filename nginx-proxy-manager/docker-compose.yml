@@ -3,6 +3,7 @@ version: "3"
 services:
   nginx:
     image: "jc21/nginx-proxy-manager:latest"
+    container_name: docker_container
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
@@ -27,3 +28,38 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - network
+
+  database:
+    image: mysql:5.7
+    container_name: docker_container_db
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      #MYSQL_DATABASE: ${MYSQL_DATABASE}
+      #MYSQL_USER: ${MYSQL_USER}
+      #MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - network
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: docker_container_pma
+    depends_on:
+      - database
+    restart: unless-stopped
+    ports:
+      - "9000:80"
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - network
+
+networks:
+  network:
+    name: docker_container_network
+    driver: bridge
