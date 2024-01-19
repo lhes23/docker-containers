@@ -1,0 +1,4 @@
+/apps/*
+!/apps/.env-sample
+!/apps/docker-compose-sample.yml
+/nginx-proxy-manager/data/*
