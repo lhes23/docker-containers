@@ -5,7 +5,7 @@ services:
     image: mysql:5.7
     container_name: ${DOMAIN_NAME}_db
     volumes:
-      - dbdata_${DOMAIN_NAME}:/var/lib/mysql
+      - dbdata:/var/lib/mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DOMAIN_NAME}
@@ -43,4 +43,4 @@ services:
       WORDPRESS_DB_PASSWORD: ${DOMAIN_NAME}
 
 volumes:
-  dbdata_${DOMAIN_NAME}:
+  dbdata:
