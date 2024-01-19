@@ -28,17 +28,9 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
-    # networks:
-    #   - network
 
   php:
     container_name: docker_container_php
     build: ./php
     volumes:
       - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
-    # networks:
-    #   - network
-# networks:
-#   network:
-#     name: docker_container_network
-#     driver: bridge
