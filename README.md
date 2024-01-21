@@ -9,7 +9,7 @@ Go to the dockercontainer/nginx-proxy-manager folder
 Run command
 sudo docker-compose up -d
 
-On Security groups open port TCP 81
+On Security groups open port All TCP from anywhere
 
 Login to proxy manager
 
