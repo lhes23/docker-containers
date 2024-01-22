@@ -85,3 +85,7 @@
 ## Enter Mysql in a container
 
 `sudo docker exec -it lester2.com_db mysql -u root`
+
+## See User in a DB
+
+`SELECT host, user FROM mysql.user;`
