@@ -24,7 +24,7 @@
 
 `git clone git@github.com:lhes23/docker-containers.git`
 
-> Go to the dockercontainer/nginx-proxy-manager folder
+> Go to the docker-container/nginx-proxy-manager folder
 
 `cd docker-container/nginx-proxy-manager`
 
@@ -33,6 +33,27 @@
 `sudo docker-compose up -d`
 
 > On Security groups open port All TCP from anywhere
+
+
+## Create a Wordpress App
+
+> Go to the Apps Folder
+
+`cd ~/docker-containers/apps`
+
+> Create a new directory - named it after the domain
+
+`sudo mkdir lester1.com`
+
+> Copy docker-compose and .env
+
+`sudo cp {docker-compose,.env} lester1.com/.`
+
+> Go to that folder and edit .env
+>
+> Then run the docker-compose
+
+
 
 ## Setup Proxy
 
