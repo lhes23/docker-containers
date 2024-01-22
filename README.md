@@ -1,11 +1,19 @@
 # Install docker container to AWS EC2 Ubuntu
+
+> Create a new Instane on AWS EC2
+
+
 `sudo apt update && sudo apt upgrade -y`
 
 `sudo apt install docker.io`
 
 `sudo apt install docker-compose`
 
+## Setup Github connection
+
 `ssh-keygen -t rsa`
+
+`cat /home/ubuntu/.ssh/id_rsa.pub`
 
 > Copy the id_rsa.pub to github Settings -> SSH and GPG keys
 
@@ -13,15 +21,21 @@
 
 > Go to the dockercontainer/nginx-proxy-manager folder
 
-Run command
-sudo docker-compose up -d
+`cd docker-container/nginx-proxy-manager`
 
-On Security groups open port All TCP from anywhere
+> Run command
 
-Login to proxy manager
+`sudo docker-compose up -d`
 
-add proxy hosts
+> On Security groups open port All TCP from anywhere
 
+## Setup Proxy
+
+> Login to proxy manager
+
+> In your web browser enter [EC2_IP]:81
+ 
+> Add proxy hosts
 
 
 ## How to See DB Credentials
