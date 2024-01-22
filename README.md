@@ -10,9 +10,9 @@
 
 `sudo apt update && sudo apt upgrade -y`
 
-`sudo apt install docker.io`
+`sudo apt install docker.io -y`
 
-`sudo apt install docker-compose`
+`sudo apt install docker-compose -y`
 
 ## Setup Github connection
 
