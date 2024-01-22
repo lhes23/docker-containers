@@ -38,8 +38,14 @@
 
 > Open phpmyadmin by going to IP_Address:9005
 >
-> Make sure that host name is %
+> Create a User Account
 > 
+> Make sure that host name is %
+>
+> And copy the credentials to the .env file
+>
+
+
 
 ## Create a Wordpress App
 
