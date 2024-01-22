@@ -1,40 +1,9 @@
 version: "3.3"
 
 services:
-  database:
-    image: mysql:5.7
-    container_name: wp_${DOMAIN_NAME}_db
-    volumes:
-      - dbdata:/var/lib/mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: wp_${DOMAIN_NAME}
-      MYSQL_DATABASE: wp_${DOMAIN_NAME}
-      MYSQL_USER: wp_${DOMAIN_NAME}
-      MYSQL_PASSWORD: wp_${DOMAIN_NAME}
-    networks:
-      - network
-
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: ${DOMAIN_NAME}_pma
-    depends_on:
-      - database
-    restart: unless-stopped
-    ports:
-      - "${PMA_PORT}:80"
-    environment:
-      PMA_HOST: wp_${DOMAIN_NAME}_db
-      MYSQL_ROOT_PASSWORD: wp_${DOMAIN_NAME}
-      UPLOAD_LIMIT: 300M
-    networks:
-      - network
-
   wordpress:
     image: wordpress:latest
     container_name: ${DOMAIN_NAME}_wp
-    depends_on:
-      - database
     volumes:
       - ./wordpress:/var/www/html
       - ../../nginx-proxy-manager/php/php.ini:/usr/local/etc/php/conf.d/php.ini
@@ -42,17 +11,14 @@ services:
       - "${WP_PORT}:80"
     restart: unless-stopped
     environment:
-      WORDPRESS_DB_HOST: wp_${DOMAIN_NAME}_db:3306
+      WORDPRESS_DB_HOST: dc_db:3306
       WORDPRESS_DB_NAME: wp_${DOMAIN_NAME}
       WORDPRESS_DB_USER: wp_${DOMAIN_NAME}
       WORDPRESS_DB_PASSWORD: wp_${DOMAIN_NAME}
     networks:
       - network
 
-volumes:
-  dbdata:
-
 networks:
   network:
-    name: ${DOMAIN_NAME}_network
-    driver: bridge
+    name: nginx_network
+    external: true

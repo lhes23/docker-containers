@@ -3,7 +3,7 @@ version: "3"
 services:
   nginx:
     image: "jc21/nginx-proxy-manager:latest"
-    container_name: docker_container_nginx
+    container_name: dc_nginx
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
@@ -28,9 +28,50 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - network
 
   php:
-    container_name: docker_container_php
+    container_name: dc_php
     build: ./php
     volumes:
       - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+    networks:
+      - network
+
+  database:
+    # image: mysql:5.7
+    image: mariadb
+    container_name: dc_db
+    command: "--default-authentication-plugin=mysql_native_password"
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - network
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: dc_pma
+    depends_on:
+      - database
+    restart: unless-stopped
+    ports:
+      - "9005:80"
+    environment:
+      PMA_HOST: dc_db
+      MYSQL_ROOT_PASSWORD: root
+      UPLOAD_LIMIT: 300M
+    networks:
+      - network
+
+volumes:
+  dbdata:
+
+networks:
+  network:
+    # external:
+    name: nginx_network
+    driver: bridge
