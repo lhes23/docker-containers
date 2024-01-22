@@ -1,7 +1,12 @@
-# Install docker container to AWS EC2 Ubuntu
+# How to create a Multi Wordpress Hosting on AWS EC2 Instance
 
-> Create a new Instane on AWS EC2
+## Install docker container to AWS EC2 Ubuntu
 
+> Create a new Instance on AWS EC2
+>
+> Update and upgrade
+>
+> Then Install docker and docker-compose
 
 `sudo apt update && sudo apt upgrade -y`
 
@@ -32,16 +37,26 @@
 ## Setup Proxy
 
 > Login to proxy manager
-
+> 
 > In your web browser enter [EC2_IP]:81
- 
-> Add proxy hosts
+>
+> Initial Credentials:
+> 
+> Email: admin@example.com
+>
+> Password: changeme
+>
+> Go to Hosts -> Proxy then Add proxy hosts
 
 
 ## How to See DB Credentials
-sudo docker exec -it container_name env
+
+`sudo docker exec -it container_name env`
 
 ## to see container
-sudo docker-compose ps
 
-sudo docker exec -it lester2.com_db mysql -u root
+`sudo docker-compose ps`
+
+## Enter Mysql in a container
+
+`sudo docker exec -it lester2.com_db mysql -u root`
