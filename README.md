@@ -72,7 +72,9 @@
 
 ## How to See DB Credentials
 
-`sudo docker exec -it container_name env`
+> sudo docker exec -it [container_name] env
+
+`sudo docker exec -it wp_lester1.com_db env`
 
 ## to see container
 
