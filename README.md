@@ -1,15 +1,17 @@
 # Install docker container to AWS EC2 Ubuntu
-sudo apt update && sudo apt upgrade -y
+`sudo apt update && sudo apt upgrade -y`
 
-sudo apt install docker.io
+`sudo apt install docker.io`
 
-sudo apt install docker-compose
+`sudo apt install docker-compose`
 
-ssh-keygen -t rsa
+`ssh-keygen -t rsa`
 
-## Copy the id_rsa.pub to github SSH and GPG keys
+> Copy the id_rsa.pub to github Settings -> SSH and GPG keys
 
-Go to the dockercontainer/nginx-proxy-manager folder
+`git clone git@github.com:lhes23/docker-containers.git`
+
+> Go to the dockercontainer/nginx-proxy-manager folder
 
 Run command
 sudo docker-compose up -d
