@@ -101,3 +101,15 @@
 ## See User in a DB
 
 `SELECT host, user FROM mysql.user;`
+
+## Problems Encountered in phpmyadmin
+
+Unknown collation: utf8mb4_0900_ai_ci
+
+Replace the below string on .sql file:
+
+> ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>
+With this:
+
+> ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
