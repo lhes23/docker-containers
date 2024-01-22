@@ -2,84 +2,84 @@
 
 ## Install docker container to AWS EC2 Ubuntu
 
-> Create a new Instance on AWS EC2
->
-> Update and upgrade
->
-> Then Install docker and docker-compose
+1. Create a new Instance on AWS EC2. Also create a securiy group. On inbound rules open port All TCP from anywhere
 
-`sudo apt update && sudo apt upgrade -y`
+2. Connect to EC21 then Update and upgrade the new Instance
 
-`sudo apt install docker.io -y`
+3. Then Install docker and docker-compose
 
-`sudo apt install docker-compose -y`
+   `sudo apt update && sudo apt upgrade -y`
+
+   `sudo apt install docker.io -y`
+
+   `sudo apt install docker-compose -y`
 
 ## Setup Github connection
 
-`ssh-keygen -t rsa`
+1. Generate a new SSH key
 
-`cat /home/ubuntu/.ssh/id_rsa.pub`
+   `ssh-keygen -t rsa`
 
-> Copy the id_rsa.pub to github Settings -> SSH and GPG keys
+2. Copy the id_rsa.pub to github Settings -> SSH and GPG keys
 
-`git clone git@github.com:lhes23/docker-containers.git`
+   `cat /home/ubuntu/.ssh/id_rsa.pub`
 
-> Go to the docker-container/nginx-proxy-manager folder
+3. Clone the Repository
 
-`cd docker-container/nginx-proxy-manager`
+   `git clone git@github.com:lhes23/docker-containers.git`
 
-> Run command
+4. Go to the docker-container/nginx-proxy-manager folder and run `docker-compose up -d` command
 
-`sudo docker-compose up -d`
+   `cd docker-container/nginx-proxy-manager`
 
-> On Security groups open port All TCP from anywhere
+   `sudo docker-compose up -d`
+
 
 ## Create User and Database
 
-> Open phpmyadmin by going to IP_Address:9005
->
-> Create a User Account
-> 
-> Make sure that host name is %
->
-> And copy the credentials to the .env file
->
+1. Open phpmyadmin by going to IP_Address:9005
+
+2. Create a User Account and Databse with grant all privileges. Make sure that host name is %
+
+3. Copy the credentials to the .env file
 
 
 
 ## Create a Wordpress App
 
-> Go to the Apps Folder
+1. Go to the Apps Folder
 
-`cd ~/docker-containers/apps`
+   `cd ~/docker-containers/apps`
 
-> Create a new directory - named it after the domain
+2. Create a new directory - named it after the domain
 
-`sudo mkdir lester1.com`
+   `sudo mkdir lester1.com`
 
-> Copy docker-compose and .env
+3. Copy docker-compose and .env
 
-`sudo cp {docker-compose,.env} lester1.com/.`
+   `sudo cp {docker-compose,.env} lester1.com/.`
 
-> Go to that folder and edit .env
->
-> Then run the docker-compose
+4. Go to that folder and edit `.env` . Add the credentials early created with phpmyadmin
+
+5. Then run the docker-compose command
+
+   `sudo docker-compose up -d`
 
 
 
 ## Setup Proxy
 
-> Login to proxy manager
-> 
-> In your web browser enter [EC2_IP]:81
->
+1. Login to proxy manager
+
+2. In your web browser enter [EC2_IP]:81
+
 > Initial Credentials:
 > 
 > Email: admin@example.com
 >
 > Password: changeme
 >
-> Go to Hosts -> Proxy then Add proxy hosts
+3. Go to Hosts -> Proxy then Add proxy hosts
 
 
 ## How to See DB Credentials
