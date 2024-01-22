@@ -34,6 +34,12 @@
 
 > On Security groups open port All TCP from anywhere
 
+## Create User and Database
+
+> Open phpmyadmin by going to IP_Address:9005
+>
+> Make sure that host name is %
+> 
 
 ## Create a Wordpress App
 
