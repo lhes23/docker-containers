@@ -12,9 +12,9 @@ services:
     restart: unless-stopped
     environment:
       WORDPRESS_DB_HOST: dc_db:3306
-      WORDPRESS_DB_NAME: wp_${DOMAIN_NAME}
-      WORDPRESS_DB_USER: wp_${DOMAIN_NAME}
-      WORDPRESS_DB_PASSWORD: wp_${DOMAIN_NAME}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
     networks:
       - network
 
