@@ -1,0 +1,9 @@
+~/docker-containers/nginx-proxy-manager/data/logs/*.log {
+       weekly
+       rotate 14
+       size 1M
+       compress
+       notifempty
+       missingok
+       dateext
+}
