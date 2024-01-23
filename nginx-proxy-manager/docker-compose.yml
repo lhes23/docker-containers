@@ -28,6 +28,7 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+      - ./logrotate.d/nginx-proxy-manager:/etc/logrotate.d/nginx-proxy-manager
     networks:
       - network
 
