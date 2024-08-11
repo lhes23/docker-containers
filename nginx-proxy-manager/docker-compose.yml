@@ -1,9 +1,8 @@
-version: "3"
-
 services:
   nginx:
-    image: "jc21/nginx-proxy-manager:latest"
-    container_name: dc_nginx
+    # image: "jc21/nginx-proxy-manager:latest"
+    image: nginx:latest
+    container_name: wp_nginx
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
@@ -16,24 +15,25 @@ services:
     # Add any other Stream port you want to expose
     # - '21:21' # FTP
 
-    # Uncomment the next line if you uncomment anything in the section
-    # environment:
-    # Uncomment this if you want to change the location of
-    #   the SQLite DB file within the container
-    # DB_SQLITE_FILE: "/data/database.sqlite"
-
-    # Uncomment this if IPv6 is not enabled on your host
-    # DISABLE_IPV6: 'true'
-
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
       - ./logrotate.d/nginx-proxy-manager:/etc/logrotate.d/nginx-proxy-manager
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./conf.d/:/etc/nginx/conf.d:ro
     networks:
       - network
 
+  certbot:
+    image: certbot/certbot:latest
+    container_name: wp_certbot
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: /bin/sh -c 'sleep infinity'
+
   php:
-    container_name: dc_php
+    container_name: wp_php
     build: ./php
     volumes:
       - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
@@ -43,7 +43,7 @@ services:
   database:
     # image: mysql:5.7
     image: mariadb
-    container_name: dc_db
+    container_name: wp_db
     command: "--default-authentication-plugin=mysql_native_password"
     volumes:
       - dbdata:/var/lib/mysql
@@ -55,14 +55,14 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    container_name: dc_pma
+    container_name: wp_pma
     depends_on:
       - database
     restart: unless-stopped
     ports:
       - "9005:80"
     environment:
-      PMA_HOST: dc_db
+      PMA_HOST: wp_db
       MYSQL_ROOT_PASSWORD: root
       UPLOAD_LIMIT: 300M
     networks:
@@ -73,6 +73,5 @@ volumes:
 
 networks:
   network:
-    # external:
-    name: nginx_network
+    name: wp_nginx_network
     driver: bridge
