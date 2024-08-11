@@ -1,19 +1,17 @@
 #!/bin/bash
 
-# Check if the correct number of arguments are provided
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <domain> <wp_port>"
     exit 1
 fi
 
-# Assign arguments to variables
 DOMAIN=$1
 WP_PORT=$2
 
 # Replace dots with underscores for database and user names
 DB_NAME="${DOMAIN//./_}_wp"
 DB_USER="${DOMAIN//./_}_wp"
-DB_PASSWORD="${DOMAIN}"
+DB_PASSWORD=$(openssl rand -base64 12)
 DB_ROOT_PASSWORD="root"  # Use the same root password as in your docker-compose.yml
 
 # Directory where files will be copied
@@ -21,9 +19,6 @@ TARGET_DIR="./${DOMAIN}"
 
 # Create the target directory if it does not exist
 mkdir -p "$TARGET_DIR"
-
-# Copy .env and docker-compose.yml to the target directory
-# cp .env docker-compose.yml "$TARGET_DIR"
 
 # Navigate to the target directory
 cd "$TARGET_DIR" || exit
@@ -115,13 +110,11 @@ server {
 EOL
 
 # Run Certbot to obtain the certificate
-
 # docker-compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d ${DOMAIN} -d www.${DOMAIN} --email admin@lester1.com --agree-tos --no-eff-email
 
 # Restart Nginx to apply changes
 docker exec wp_nginx nginx -s reload
 
-# Print completion message
 echo "WordPress setup is complete for ${DOMAIN}."
 
 # Go back to the original directory
