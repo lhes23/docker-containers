@@ -34,7 +34,6 @@
 
    `sudo docker-compose up -d`
 
-
 ## Create User and Database
 
 1. Open phpmyadmin by going to IP_Address:9005
@@ -42,8 +41,6 @@
 2. Create a User Account and Databse with grant all privileges. Make sure that host name is %
 
 3. Copy the credentials to the .env file
-
-
 
 ## Create a Wordpress App
 
@@ -65,8 +62,6 @@
 
    `sudo docker-compose up -d`
 
-
-
 ## Setup Proxy
 
 1. Login to proxy manager
@@ -74,13 +69,12 @@
 2. In your web browser enter [EC2_IP]:81
 
 > Initial Credentials:
-> 
+>
 > Email: admin@example.com
 >
 > Password: changeme
 >
-3. Go to Hosts -> Proxy then Add proxy hosts
-
+> 3. Go to Hosts -> Proxy then Add proxy hosts
 
 ## How to See DB Credentials
 
@@ -110,6 +104,10 @@ Replace the below string on .sql file:
 
 > ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 >
-With this:
+> With this:
 
 > ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+## To run certbot
+
+docker-compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d lester1.com -d www.lester1.com --email admin@lester1.com --agree-tos --no-eff-email

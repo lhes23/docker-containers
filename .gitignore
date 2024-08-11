@@ -1,6 +1,4 @@
 /apps/*
-!/apps/.env
-!/apps/docker-compose.yml
-!/apps/wordpress1.com.conf
+!/apps/setup_wordpress.sh
 /nginx-proxy-manager/data/*
 /nginx-proxy-manager/db_data/*
