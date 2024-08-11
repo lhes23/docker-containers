@@ -10,6 +10,12 @@ fi
 DOMAIN=$1
 WP_PORT=$2
 
+# Replace dots with underscores for database and user names
+DB_NAME="${DOMAIN//./_}_wp"
+DB_USER="${DOMAIN//./_}_wp"
+DB_PASSWORD="${DOMAIN}"
+DB_ROOT_PASSWORD="root"  # Use the same root password as in your docker-compose.yml
+
 # Directory where files will be copied
 TARGET_DIR="./${DOMAIN}"
 
@@ -25,7 +31,7 @@ cd "$TARGET_DIR" || exit
 mkdir -p wordpress
 chmod -R 755 wordpress
 
-# Create a docker-compose.override.yml for custom configuration
+# Create a docker-compose.yml for custom configuration
 cat <<EOL > docker-compose.yml
 services:
   wordpress:
@@ -39,8 +45,8 @@ services:
     restart: unless-stopped
     environment:
       WORDPRESS_DB_HOST: wp_db:3306
-      WORDPRESS_DB_NAME: ${DOMAIN}_wp
-      WORDPRESS_DB_USER: ${DOMAIN}_wp
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DOMAIN}
     networks:
       - network
@@ -54,22 +60,18 @@ EOL
 # Start the Docker containers
 docker-compose up -d
 
-# Create the database and user
-DB_NAME="${DOMAIN}_wp"
-DB_USER="${DOMAIN}_wp"
-DB_PASSWORD="${DOMAIN}"
-DB_ROOT_PASSWORD="root"  # Use the same root password as in your docker-compose.yml
+cd ../../nginx-proxy-manager
 
 echo "Creating database and user for WordPress..."
 
-docker exec wp_db mysql -u root -p"$DB_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
-docker exec wp_db mysql -u root -p"$DB_ROOT_PASSWORD" -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';"
-docker exec wp_db mysql -u root -p"$DB_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
-docker exec wp_db mysql -u root -p"$DB_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
-
+# Create the database and user
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
 
 # Create the Nginx configuration file
-cat <<EOL > ../../nginx-proxy-manager/conf.d/${DOMAIN}.conf
+cat <<EOL > conf.d/${DOMAIN}.conf
 server {
     listen 80;
     server_name ${DOMAIN} www.${DOMAIN};
@@ -113,14 +115,14 @@ server {
 EOL
 
 # Run Certbot to obtain the certificate
-cd ../../nginx-proxy-manager
+
 # docker-compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d ${DOMAIN} -d www.${DOMAIN} --email admin@lester1.com --agree-tos --no-eff-email
 
 # Restart Nginx to apply changes
 docker exec wp_nginx nginx -s reload
 
 # Print completion message
-echo "Setup complete for ${DOMAIN}. WordPress is running, and SSL certificates have been obtained."
+echo "WordPress setup is complete for ${DOMAIN}."
 
 # Go back to the original directory
 cd - || exit
