@@ -34,82 +34,16 @@
 
    `sudo docker-compose up -d`
 
-
-## Create User and Database
-
-1. Open phpmyadmin by going to IP_Address:9005
-
-2. Create a User Account and Databse with grant all privileges. Make sure that host name is %
-
-3. Copy the credentials to the .env file
-
-
-
 ## Create a Wordpress App
 
 1. Go to the Apps Folder
 
    `cd ~/docker-containers/apps`
 
-2. Create a new directory - named it after the domain
+2. Run setup_wordpress.sh with the following arguments
 
-   `sudo mkdir lester1.com`
+   `./setup_wordpress.sh <domain_name> <port_number>`
 
-3. Copy docker-compose and .env
+## To run certbot
 
-   `sudo cp {docker-compose,.env} lester1.com/.`
-
-4. Go to that folder and edit `.env` . Add the credentials early created with phpmyadmin
-
-5. Then run the docker-compose command
-
-   `sudo docker-compose up -d`
-
-
-
-## Setup Proxy
-
-1. Login to proxy manager
-
-2. In your web browser enter [EC2_IP]:81
-
-> Initial Credentials:
-> 
-> Email: admin@example.com
->
-> Password: changeme
->
-3. Go to Hosts -> Proxy then Add proxy hosts
-
-
-## How to See DB Credentials
-
-> sudo docker exec -it container_name env
->
-> sudo docker exec -it container_name_or_id bash
-
-`sudo docker exec -it wp_lester1.com_db env`
-
-## to see container
-
-`sudo docker-compose ps`
-
-## Enter Mysql in a container
-
-`sudo docker exec -it lester2.com_db mysql -u root`
-
-## See User in a DB
-
-`SELECT host, user FROM mysql.user;`
-
-## Problems Encountered in phpmyadmin
-
-Unknown collation: utf8mb4_0900_ai_ci
-
-Replace the below string on .sql file:
-
-> ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->
-With this:
-
-> ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+docker-compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d lester1.com -d www.lester1.com --email admin@lester1.com --agree-tos --no-eff-email
