@@ -73,7 +73,7 @@ services:
       WORDPRESS_DB_HOST: ${DOMAIN}_wp_db:3306
       WORDPRESS_DB_NAME: ${DB_NAME}
       WORDPRESS_DB_USER: ${DB_USER}
-      WORDPRESS_DB_PASSWORD: ${DOMAIN}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - network
 
