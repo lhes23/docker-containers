@@ -34,16 +34,43 @@
 
    `sudo docker-compose up -d`
 
+## Make docker part of the admin group
+
+Step 1: Create the Docker Group (If It Doesn't Exist)
+
+`sudo groupadd docker`
+
+Step 2: Add Your User to the Docker Group
+
+`sudo usermod -aG docker $USER`
+
+Step 3: Apply the New Group Membership
+
+`newgrp docker`
+
 ## Create a Wordpress App
 
 1. Go to the Apps Folder
 
    `cd ~/docker-containers/apps`
 
-2. Run setup_wordpress.sh with the following arguments
+2. Make the file executable
+
+   `chmod +x setup_wordpress.sh`
+
+3. Run setup_wordpress.sh with the following arguments
 
    `./setup_wordpress.sh <domain_name> <port_number>`
 
 ## To run certbot
 
 docker-compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d lester1.com -d www.lester1.com --email admin@lester1.com --agree-tos --no-eff-email
+
+### Check whos using ports:
+
+`sudo lsof -i -P -n | grep LISTEN`
+
+```
+sudo systemctl stop nginx
+sudo systemctl stop apache2
+```
