@@ -40,37 +40,6 @@ services:
     networks:
       - network
 
-  database:
-    # image: mysql:5.7
-    image: mariadb
-    container_name: wp_db
-    command: "--default-authentication-plugin=mysql_native_password"
-    volumes:
-      - dbdata:/var/lib/mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    networks:
-      - network
-
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: wp_pma
-    depends_on:
-      - database
-    restart: unless-stopped
-    ports:
-      - "9005:80"
-    environment:
-      PMA_HOST: wp_db
-      MYSQL_ROOT_PASSWORD: root
-      UPLOAD_LIMIT: 300M
-    networks:
-      - network
-
-volumes:
-  dbdata:
-
 networks:
   network:
     name: wp_nginx_network
