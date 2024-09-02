@@ -48,6 +48,11 @@ Step 3: Apply the New Group Membership
 
 `newgrp docker`
 
+Step 4: Change the mod of the docker sock
+
+`sudo chmod 666 /var/run/docker.sock`
+
+
 ## Create a Wordpress App
 
 1. Go to the Apps Folder
