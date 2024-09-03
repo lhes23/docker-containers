@@ -69,7 +69,7 @@ Step 4: Change the mod of the docker sock
 
 ## To run certbot
 
-docker-compose exec certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d lester1.com -d www.lester1.com --email admin@lester1.com --agree-tos --no-eff-email
+docker exec wp_certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d lester1.com -d www.lester1.com --email admin@lester1.com --agree-tos --no-eff-email
 
 ### Check whos using ports:
 
