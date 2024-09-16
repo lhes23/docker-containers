@@ -4,3 +4,5 @@
 /nginx-proxy-manager/db_data/*
 /nginx-proxy-manager/conf.d
 !/nginx-proxy-manager/conf.d/default.conf
+/nginx-proxy-manager/letsencrypt/*
+/nginx-proxy-manager/certbot/*

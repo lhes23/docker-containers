@@ -7,7 +7,7 @@ fi
 
 DOMAIN=$1
 WP_PORT=$2
-PMA_PORT=$((WP_PORT + 1000))
+# PMA_PORT=$((WP_PORT + 1000))
 
 # Replace dots with underscores for database and user names
 DB_NAME="${DOMAIN//./_}_wp"
@@ -30,33 +30,33 @@ chmod -R 755 wordpress
 # Create a docker-compose.yml for custom configuration
 cat <<EOL > docker-compose.yml
 services:
-  wp_db:
-      # image: mysql:5.7
-      image: mariadb
-      container_name: ${DOMAIN}_wp_db
-      command: "--default-authentication-plugin=mysql_native_password"
-      volumes:
-        - dbdata:/var/lib/mysql
-      restart: unless-stopped
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-      networks:
-        - network
+  # wp_db:
+  #     # image: mysql:5.7
+  #     image: mariadb
+  #     container_name: ${DOMAIN}_wp_db
+  #     command: "--default-authentication-plugin=mysql_native_password"
+  #     volumes:
+  #       - dbdata:/var/lib/mysql
+  #     restart: unless-stopped
+  #     environment:
+  #       MYSQL_ROOT_PASSWORD: root
+  #     networks:
+  #       - network
 
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: ${DOMAIN}_wp_pma
-    depends_on:
-      - wp_db
-    restart: unless-stopped
-    ports:
-      - "${PMA_PORT}:80"
-    environment:
-      PMA_HOST: wp_db
-      MYSQL_ROOT_PASSWORD: root
-      UPLOAD_LIMIT: 300M
-    networks:
-      - network
+  # phpmyadmin:
+  #   image: phpmyadmin
+  #   container_name: ${DOMAIN}_wp_pma
+  #   depends_on:
+  #     - wp_db
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${PMA_PORT}:80"
+  #   environment:
+  #     PMA_HOST: wp_db
+  #     MYSQL_ROOT_PASSWORD: root
+  #     UPLOAD_LIMIT: 300M
+  #   networks:
+  #     - network
 
   wordpress:
     image: wordpress:latest
@@ -70,7 +70,7 @@ services:
       - "${WP_PORT}:80"
     restart: unless-stopped
     environment:
-      WORDPRESS_DB_HOST: ${DOMAIN}_wp_db:3306
+      WORDPRESS_DB_HOST: wp_db:3306
       WORDPRESS_DB_NAME: ${DB_NAME}
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
@@ -90,7 +90,7 @@ EOL
 docker-compose up -d
 
 # Wait for MariaDB to initialize properly
-until docker exec ${DOMAIN}_wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "SELECT 1" >/dev/null 2>&1; do
+until docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "SELECT 1" >/dev/null 2>&1; do
     echo "Waiting for MariaDB to start..."
     sleep 5
 done
@@ -99,10 +99,10 @@ done
 echo "Creating database and user for WordPress..."
 
 # Create the database and user
-docker exec ${DOMAIN}_wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
-docker exec ${DOMAIN}_wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';"
-docker exec ${DOMAIN}_wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
-docker exec ${DOMAIN}_wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
+docker exec wp_db mariadb -u root -p$DB_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
 
 echo "Database and user for WordPress has been created."
 
