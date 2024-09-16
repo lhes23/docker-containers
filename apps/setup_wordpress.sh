@@ -61,8 +61,8 @@ services:
   wordpress:
     image: wordpress:latest
     container_name: ${DOMAIN}_wp
-    depends_on:
-        - wp_db
+    # depends_on:
+    #     - wp_db
     volumes:
       - ./wordpress:/var/www/html
       - ../../nginx-proxy-manager/php/php.ini:/usr/local/etc/php/conf.d/php.ini
