@@ -77,8 +77,8 @@ services:
     networks:
       - network
 
-volumes:
-  dbdata:
+# volumes:
+#   dbdata:
 
 networks:
   network:

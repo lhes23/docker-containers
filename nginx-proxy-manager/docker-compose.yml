@@ -68,6 +68,9 @@ services:
     networks:
       - network
 
+volumes:
+  dbdata:
+
 networks:
   network:
     name: wp_nginx_network
